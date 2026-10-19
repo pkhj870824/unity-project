@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -9093448295026351532}
   m_Layer: 0
   m_Name: BulletSpawner
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,5 +128,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletSpawner
   bulletPrefab: {fileID: 1258541027172522545, guid: 9fdf9eac737f0944891dcd2561a3f90c, type: 3}
-  spawnRateMin: 0.5
-  spawnRateMax: 3
+  interval: 1

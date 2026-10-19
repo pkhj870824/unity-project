@@ -3,34 +3,34 @@ using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour
 {
+
     public GameObject bulletPrefab;
-    public float spawnRateMin = 0.5f;
-    public float spawnRateMax = 3f;
-
     private Transform target;
-    private float spawnRate;
-    private float timeAfterSpawn;
+    public float interval = 1f;
+    private float timer = 0;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        timeAfterSpawn = 0f;
-        spawnRate = Random.Range(spawnRateMin, spawnRateMax);
-        target = FindAnyObjectByType<PlayerController>().transform;
-
+        GameObject findGo = GameObject.FindWithTag("Player");
+        target = findGo.transform;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        timeAfterSpawn += Time.deltaTime;
-        if (timeAfterSpawn >= spawnRate)
+        timer += Time.deltaTime;
+        if (timer > interval)
         {
-            timeAfterSpawn = 0;
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-            bullet.transform.LookAt(target);
-            spawnRate =Random.Range(spawnRateMin, spawnRateMax);
+            timer = 0f;
+            Spawn();
         }
+    }
 
+    private void Spawn()
+    {
+        Vector3 position = transform.position;
+        Vector3 direction = target.position - transform.position;
+        direction.Normalize();
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        Instantiate(bulletPrefab, position, rotation);
     }
 }

@@ -1406,6 +1406,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BulletSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 2043873009928170683, guid: a1585d41ea4d3d546b3a724832c5af04, type: 3}
+      propertyPath: m_TagString
+      value: Bullet
+      objectReference: {fileID: 0}
     - target: {fileID: 9205251311874716267, guid: a1585d41ea4d3d546b3a724832c5af04, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.56054

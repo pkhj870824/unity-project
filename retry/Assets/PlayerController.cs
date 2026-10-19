@@ -3,28 +3,29 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody playerRigidbody;
-    public float speed = 8f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField]
+    private float speed = 10f;
+
+    private Rigidbody rb;
+
+
+    private void Start()
     {
-        playerRigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        float xInput = Input.GetAxis("Horizontal");
-        float zInput = Input.GetAxis("Vertical");
+        Vector3 direction = Vector3.zero;
+        direction.x = Input.GetAxisRaw("Horizontal");
+        direction.z = Input.GetAxisRaw("Vertical");
 
-        float xSpeed = xInput * speed;
-        float zSpeed = zInput * speed;
+        Debug.Log(direction.x);
 
-        Vector3 newVelocity = new Vector3(xSpeed, 0f, zSpeed);
-        playerRigidbody.linearVelocity = newVelocity;
-    }
-    public void Die()
-    {
-        gameObject.SetActive(false);
+        if (direction.magnitude > 1f)
+        {
+            direction.Normalize();
+        }
+        rb.linearVelocity = direction * speed;
     }
 }

@@ -3,28 +3,31 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 8f;
-    private Rigidbody bulletRigidbody;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Rigidbody rb;
+
+    private void Start()
     {
-        bulletRigidbody = GetComponent<Rigidbody>();
-        bulletRigidbody.linearVelocity = transform.forward * speed;
-        Destroy(gameObject, 3f);
+        rb = GetComponent<Rigidbody>();
+        rb.linearVelocity = transform.forward * speed;
     }
-    void OnTriggerEnter(Collider other)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            if(playerController != null)
-            {
-                playerController.Die();
-            }
+            other.gameObject.SetActive(false);
+        }
+
+        if (!other.CompareTag("Bullet"))
+        {
+            Destroy(gameObject);
         }
     }
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerStay(Collider other)
     {
-        
+    }
+    private void OnTriggerExit(Collider other)
+    {
     }
 }
+

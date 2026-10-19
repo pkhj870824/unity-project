@@ -7,11 +7,14 @@ public class PlayerController : MonoBehaviour
     private float speed = 10f;
 
     private Rigidbody rb;
-
+    private GameManager gameManager;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        GameObject findGo = GameObject.FindWithTag("GameController");
+        gameManager = findGo.GetComponent<GameManager>();
     }
 
     private void Update()
@@ -27,5 +30,11 @@ public class PlayerController : MonoBehaviour
             direction.Normalize();
         }
         rb.linearVelocity = direction * speed;
+    }
+
+    public void OnDie()
+    {
+        gameObject.SetActive(false);
+        gameManager.EndGame();
     }
 }

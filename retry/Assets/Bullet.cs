@@ -15,7 +15,11 @@ public class Bullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.gameObject.SetActive(false);
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.OnDie();
+            }
         }
 
         if (!other.CompareTag("Bullet"))

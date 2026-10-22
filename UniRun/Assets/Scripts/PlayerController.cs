@@ -12,22 +12,35 @@ public class PlayerController : MonoBehaviour
 {
     [Header("점프 기능")]
 
-    //어트리뷰트 : 기능에 영향을 주지않고 쓸때 편하기 위해 만들어둔 것 ex) header, serializefield,
-    //[SerializeField] : 외부에 공개 X / 밖에서 수정 불가능 / 유니티에서 수정 가능
-    //private : 외부에 공개 x / 밖, 유니티에서 수정 불가능
-    //public : 외부에 공개 o / 밖 유니티에서 수정 가능
-    [SerializeField] Rigidbody2D rb;
-    [SerializeField][Range(0, 20f)] float jumpSpeed;
-    [SerializeField] AudioSource jumpsound;
-    [SerializeField] bool isGrounded;
-    [SerializeField] int jumpCount;
+    [SerializeField] 
+    private Rigidbody2D rb;
+
+    [SerializeField][Range(0, 20f)] 
+    private float jumpSpeed;
+
+    [SerializeField] 
+    private AudioSource jumpsound;
+
+    [SerializeField] 
+    private bool isGrounded;
+
+    [SerializeField] 
+    private int jumpCount;
 
     [Header("애니메이션")]
-    [SerializeField] Animator animator;
+
+    [SerializeField] 
+    private Animator animator;
 
     [Header("게임 오버")]
-    [SerializeField] AudioSource dieSound;
-    [SerializeField] bool isDead;
+
+    [SerializeField] 
+    private AudioSource dieSound;
+    
+    private GameManager gameManager;
+    
+    [SerializeField] 
+    private bool isDead;
 
     // Awake 함수는 Start 함수보다 먼저 호출됨
     private void Awake()
@@ -36,9 +49,15 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    private void Start()
+    {
+        GameObject findGo = GameObject.FindWithTag("GameController");
+        gameManager = findGo.GetComponent<GameManager>();
+    }
+
     private void Update()
     {
-        if (Input.GetButtonDown("Jump") && jumpCount <= 1 && !isDead)
+        if (Input.GetButtonDown("Fire1") && jumpCount <= 1 && !isDead)
         {
             Jump();
         }
@@ -56,6 +75,8 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         //바닥에 떨어져서 멈춰서 죽는걸 원할때 rb.simulated = false;
         dieSound.Play();
+
+        gameManager.OnPlayerDead();
     }
     private void Jump()
     {
@@ -66,7 +87,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.tag == "Platform")
+        if (collision.collider.tag == "Platform" && 
+        collision.contacts[0].normal.y > 0.7f)
         {
             isGrounded = true;
             jumpCount = 0;

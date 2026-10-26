@@ -79,7 +79,7 @@ public class Gun : MonoBehaviour
             hitposition = fireTransform.position + fireTransform.forward * fireDistance;
         }
 
-        StartCoroutine(ShotEffect(hitposition));
+        StartCoroutine(CoShotEffect(hitposition));
 
         magAmmo--;
         uiManager.SetAmmoText(magAmmo, ammoRemain);
@@ -92,7 +92,7 @@ public class Gun : MonoBehaviour
     }
 
 
-    private IEnumerator ShotEffect(Vector3 hitPosition)
+    private IEnumerator CoShotEffect(Vector3 hitPosition)
     {
         muzzleFlashEffect.Play();
         shellEjectffect.Play();
@@ -106,36 +106,30 @@ public class Gun : MonoBehaviour
         bulletLineRenderer.enabled = false;
     }
 
-    private IEnumerator ReloadRoutine()
-    {
-        CurrentState = State.Reloading;
-        gunAudioPlayer.PlayOneShot(gunData.reloadClip);
-        yield return new WaitForSeconds(gunData.reloadTime);
-        int reloadAmmo = gunData.magCapacity - magAmmo;
 
-        if (ammoRemain < reloadAmmo)
-        {
-            reloadAmmo = ammoRemain;
-        }
-
-        magAmmo += reloadAmmo;
-        ammoRemain -= reloadAmmo;
-
-        CurrentState = State.Ready;
-        uiManager.SetAmmoText(magAmmo, ammoRemain);
-
-
-    }
 
 
     public bool Reload()
     {
-        if (ammoRemain == 0 || magAmmo == gunData.magCapacity || CurrentState == State.Reloading)
+        if (ammoRemain <= 0 || magAmmo >= gunData.magCapacity || CurrentState == State.Reloading)
         {
             return false;
         }
-        StartCoroutine(ReloadRoutine());
+        StartCoroutine(CoReload());
         CurrentState = State.Reloading;
         return true;
+    }
+    private IEnumerator CoReload()
+    {
+        CurrentState = State.Reloading;
+        gunAudioPlayer.PlayOneShot(gunData.reloadClip);
+        yield return new WaitForSeconds(gunData.reloadTime);
+
+        int ammoToFill = Mathf.Min(gunData.magCapacity - magAmmo, ammoRemain);
+        magAmmo += ammoToFill;
+        ammoRemain -= ammoToFill;
+        uiManager.SetAmmoText(magAmmo, ammoRemain);
+
+        CurrentState = State.Ready;
     }
 }

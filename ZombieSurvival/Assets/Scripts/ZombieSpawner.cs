@@ -4,10 +4,12 @@ using UnityEngine.UI;
 using NUnit.Framework.Internal;
 using System.IO.Compression;
 using System.Collections;
+using Mono.Cecil;
 
-public class ZombieSponner : MonoBehaviour
+public class ZombieSpawner : MonoBehaviour
 {
-    public UiManager uiManager;
+    public GameManager gameManager;
+    private UiManager uiManager;
     public Zombie zombiePrefab;
     public ZombieData[] zombieDatas;
     public Transform[] spawnPoints;
@@ -17,6 +19,12 @@ public class ZombieSponner : MonoBehaviour
 
     private int wave = 0;
 
+    private void Start()
+    {
+        GameObject findGo = GameObject.FindWithTag("GameController");
+        gameManager = findGo.GetComponent<GameManager>();
+        uiManager = gameManager.uiManager;
+    }
     private void Update()
     {
         if (zombies.Count == 0)
@@ -52,6 +60,11 @@ public class ZombieSponner : MonoBehaviour
             zombie.gameObject.SetActive(false);
             zombiePool.Add(zombie);
 
+
+            zombie.OnDead.AddListener(() => zombies.Remove(zombie));
+            zombie.OnDead.AddListener(() => StartCoroutine(CoReturnToPoolZombie(zombie)));
+            zombie.OnDead.AddListener(() => uiManager.SetWaveText(wave, zombies.Count));
+            zombie.OnDead.AddListener(() => gameManager.AddScore(50));
         }
 
         zombie = zombiePool[0];
@@ -61,9 +74,7 @@ public class ZombieSponner : MonoBehaviour
         zombie.gameObject.SetActive(true);
         zombies.Add(zombie);
         zombiePool.Remove(zombie);
-        zombie.OnDead.AddListener(() => zombies.Remove(zombie));
-        zombie.OnDead.AddListener(() => StartCoroutine(CoReturnToPoolZombie(zombie)));
-        zombie.OnDead.AddListener(() => uiManager.SetWaveText(wave, zombies.Count));
+
     }
 
     private IEnumerator CoReturnToPoolZombie(Zombie zombie)
@@ -71,5 +82,13 @@ public class ZombieSponner : MonoBehaviour
         yield return new WaitForSeconds(5f);
         zombie.gameObject.SetActive(false);
         zombiePool.Add(zombie);
+    }
+
+    public void onEndGame()
+    {
+        for (int i = zombies.Count - 1; i >= 0; --i)
+        {
+            zombies[i].Die();
+        }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 
-public class Zombie : LivingEntitiy
+public class Zombie : LivingEntity 
 {
     public enum State
     {

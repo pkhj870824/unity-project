@@ -1,8 +1,4 @@
-using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
@@ -11,24 +7,34 @@ public class Gun : MonoBehaviour
     {
         Ready,
         Empty,
-        Reloading,
+        Realoding,
     }
+
     public State CurrentState { get; private set; }
 
     public Transform fireTransform;
 
     public ParticleSystem muzzleFlashEffect;
-    public ParticleSystem shellEjectffect;
+    public ParticleSystem shellEjectEffect;
+
     private LineRenderer bulletLineRenderer;
+
     private AudioSource gunAudioPlayer;
+
     public GunData gunData;
-
     private float fireDistance = 50f;
-
     private int ammoRemain;
     private int magAmmo;
+
     private float lastFireTime;
+
     public UiManager uiManager;
+
+    public void AddAmmo(int add)
+    {
+        ammoRemain += add;
+        uiManager.SetAmmoText(magAmmo, ammoRemain);
+    }
 
     private void Awake()
     {
@@ -38,6 +44,7 @@ public class Gun : MonoBehaviour
         bulletLineRenderer.positionCount = 2;
         bulletLineRenderer.enabled = false;
     }
+
     private void OnEnable()
     {
         ammoRemain = gunData.startAmmoRemain;
@@ -61,12 +68,12 @@ public class Gun : MonoBehaviour
 
     private void Shoot()
     {
-        Vector3 hitposition;
+        Vector3 hitPosition;
 
         Ray ray = new Ray(fireTransform.position, fireTransform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, fireDistance, targetLayer))
         {
-            hitposition = hit.point;
+            hitPosition = hit.point;
 
             IDamageable target = hit.collider.GetComponent<IDamageable>();
             if (target != null)
@@ -76,10 +83,10 @@ public class Gun : MonoBehaviour
         }
         else
         {
-            hitposition = fireTransform.position + fireTransform.forward * fireDistance;
+            hitPosition = fireTransform.position + fireTransform.forward * fireDistance;
         }
 
-        StartCoroutine(CoShotEffect(hitposition));
+        StartCoroutine(CoShotEffect(hitPosition));
 
         magAmmo--;
         uiManager.SetAmmoText(magAmmo, ammoRemain);
@@ -88,46 +95,44 @@ public class Gun : MonoBehaviour
         {
             CurrentState = State.Empty;
         }
-
     }
-
 
     private IEnumerator CoShotEffect(Vector3 hitPosition)
     {
         muzzleFlashEffect.Play();
-        shellEjectffect.Play();
+        shellEjectEffect.Play();
         gunAudioPlayer.PlayOneShot(gunData.shotClip);
 
         bulletLineRenderer.SetPosition(0, fireTransform.position);
         bulletLineRenderer.SetPosition(1, hitPosition);
         bulletLineRenderer.enabled = true;
-
         yield return new WaitForSeconds(0.03f);
+
         bulletLineRenderer.enabled = false;
     }
 
-
-
-
     public bool Reload()
     {
-        if (ammoRemain <= 0 || magAmmo >= gunData.magCapacity || CurrentState == State.Reloading)
+        if (CurrentState == State.Realoding || ammoRemain <= 0 || magAmmo >= gunData.magCapacity)
         {
             return false;
         }
+
         StartCoroutine(CoReload());
-        CurrentState = State.Reloading;
         return true;
     }
+
     private IEnumerator CoReload()
     {
-        CurrentState = State.Reloading;
+        CurrentState = State.Realoding;
         gunAudioPlayer.PlayOneShot(gunData.reloadClip);
         yield return new WaitForSeconds(gunData.reloadTime);
 
         int ammoToFill = Mathf.Min(gunData.magCapacity - magAmmo, ammoRemain);
+
         magAmmo += ammoToFill;
         ammoRemain -= ammoToFill;
+
         uiManager.SetAmmoText(magAmmo, ammoRemain);
 
         CurrentState = State.Ready;

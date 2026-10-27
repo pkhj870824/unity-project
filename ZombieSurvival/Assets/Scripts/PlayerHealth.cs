@@ -1,8 +1,9 @@
 using JetBrains.Annotations;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealth : LivingEntitiy
+public class PlayerHealth : LivingEntity
 {
     public readonly static int IdDie = Animator.StringToHash("Die");
     public Image uiHealth;
@@ -36,7 +37,6 @@ public class PlayerHealth : LivingEntitiy
     }
 
 
-
     public override void OnDamage(float damage, Vector3 hitpoint, Vector3 hitNormal)
     {
         if (!IsDead)
@@ -60,5 +60,11 @@ public class PlayerHealth : LivingEntitiy
 
         uiHealth.gameObject.SetActive(false);
 
+    }
+
+    public override void AddHealth(int add)
+    {
+        base.AddHealth(add);
+        uiHealth.fillAmount = Health / startingHealth;
     }
 }

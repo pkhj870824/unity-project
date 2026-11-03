@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,7 +30,7 @@ public class StartWindow : GenericWindow
     }
     public void OnClickContinue()
     {
-        Debug.Log("OnClickContinue");
+        manager.Open(Windows.GameOver);
     }
     public void OnClickNewGame()
     {

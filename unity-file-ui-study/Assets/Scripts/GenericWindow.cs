@@ -3,9 +3,9 @@ using UnityEngine.EventSystems;
 
 public class GenericWindow : MonoBehaviour
 {
-
     protected WindowManager manager;
-    public GameObject firstSelected;
+
+    public GameObject firstSeleted;
 
     private EventSystem eventSystem;
 
@@ -21,7 +21,7 @@ public class GenericWindow : MonoBehaviour
 
     public void OnFocus()
     {
-        eventSystem.SetSelectedGameObject(firstSelected);
+        eventSystem.SetSelectedGameObject(firstSeleted);
     }
 
     public virtual void Open()

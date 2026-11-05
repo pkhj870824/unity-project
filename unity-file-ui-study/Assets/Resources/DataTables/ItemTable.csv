@@ -1,0 +1,5 @@
+Id,Type,Name,Value,Cost
+Item1,Weapon,검,10,500
+Item2,Equip,방패,20,200
+Item3,Consumable,물약,50,50
+Item4,Weapon,활,30,100

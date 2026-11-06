@@ -15,9 +15,7 @@ public abstract class DataTable
 
     public static List<T> LoadCSV<T>(String csvText)
     {
-        TextAsset csv = Resources.Load<TextAsset>("DataTables/StringTableKR");
-
-        using (var reader = new StringReader(csv.text))
+        using (var reader = new StringReader(csvText))
         using (var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
         {
             var records = csvReader.GetRecords<T>();

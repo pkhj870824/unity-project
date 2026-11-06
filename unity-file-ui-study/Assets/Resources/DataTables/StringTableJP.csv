@@ -1,0 +1,16 @@
+Id,String
+HELLO,こんにちは
+BYE,さようなら
+YOU_DIE,お前死んだな
+ITEM_1_NAME,アイテム1の名前
+ITEM_2_NAME,アイテム2の名前
+ITEM_3_NAME,アイテム3の名前
+ITEM_4_NAME,アイテム4の名前
+ITEM_1_DESC,アイテム1の説明
+ITEM_2_DESC,アイテム2の説明
+ITEM_3_DESC,アイテム3の説明
+ITEM_4_DESC,アイテム4の説明
+CHAR_1_NAME,キャラクター1の名前
+CHAR_2_NAME,キャラクター2の名前
+CHAR_3_NAME,キャラクター3の名前
+CHAR_4_NAME,キャラクター4の名前

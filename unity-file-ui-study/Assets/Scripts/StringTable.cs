@@ -20,6 +20,7 @@ public class StringTable : DataTable
         string path = string.Format(FormatPath, filename);
         TextAsset textAsset = Resources.Load<TextAsset>(path);
         List<Data> list = LoadCSV<Data>(textAsset.text);
+
         foreach (var item in list)
         {
             if (!dictionary.ContainsKey(item.Id))

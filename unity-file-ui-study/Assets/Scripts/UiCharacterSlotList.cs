@@ -123,6 +123,8 @@ public class UiCharacterSlotList : MonoBehaviour
     public void AddRandomCharacter()
     {
         saveCharacterDataList.Add(SaveCharacterData.GetRandomCharacter());
+            Debug.Log($"생성된 캐릭터 수: {saveCharacterDataList.Count}");
+
         UpdateSlot();
     }
 

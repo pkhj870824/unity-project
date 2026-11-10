@@ -30,7 +30,10 @@ public class UiCharacterInfo : MonoBehaviour
     {
         SetCharacter(DataTableManager.CharacterTable.Get(id));
     }
-
+    public void OnSelectCharacter(SaveCharacterData saveData)
+    {
+        SetCharacter(saveData?.CharacterData);
+    }
     public void SetCharacter(CharacterData data)
     {
         if (data == null)

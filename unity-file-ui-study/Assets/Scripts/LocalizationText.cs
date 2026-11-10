@@ -1,6 +1,6 @@
-using UnityEngine;
+using System.Linq.Expressions;
 using TMPro;
-using Unity.VisualScripting;
+using UnityEngine;
 
 [RequireComponent(typeof(TMP_Text))]
 [ExecuteInEditMode]
@@ -11,6 +11,7 @@ public class LocalizationText : MonoBehaviour
 #if UNITY_EDITOR
     public Languages editorLang;
 #endif
+
     private TMP_Text text;
 
     private void Awake()
@@ -56,17 +57,16 @@ public class LocalizationText : MonoBehaviour
         var stringTable = DataTableManager.Get<StringTable>(tableId);
         text.text = stringTable.Get(stringId);
     }
+
     [ContextMenu("Apply Editor Lang To All Active")]
     private void ApplyEditorLangToAllActive()
     {
         var all = FindObjectsByType<LocalizationText>(FindObjectsSortMode.None);
-        foreach(var item in all)
+        foreach (var item in all)
         {
             item.editorLang = editorLang;
             item.OnChangedLanguage(editorLang);
         }
     }
 #endif
-
-
 }

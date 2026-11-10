@@ -1,41 +1,41 @@
-using UnityEngine;
-using System.IO;
 using System.Collections.Generic;
-using Mono.Cecil;
-
+using System.IO;
+using UnityEngine;
 
 public class Practice3 : MonoBehaviour
 {
     private string folder;
     private string path;
+
     private Dictionary<string, string> settings = new Dictionary<string, string>();
 
     private void Start()
     {
+        Debug.Log(Application.persistentDataPath);
         folder = Path.Combine(Application.persistentDataPath, "Settings");
-
         if (!Directory.Exists(folder))
         {
             Directory.CreateDirectory(folder);
         }
-
         path = Path.Combine(folder, "settings.cfg");
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Load();
             PrintAll();
         }
-         if(Input.GetKeyDown(KeyCode.Alpha2))
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Modify();
             Save();
             PrintAll();
         }
     }
+
     private void Load()
     {
         settings.Clear();
@@ -50,7 +50,7 @@ public class Practice3 : MonoBehaviour
                     settings[parts[0]] = parts[1];
                 }
             }
-            Debug.Log($"설정 로드 완료(항목 {settings.Count})");
+            Debug.Log($"설정 로드 완료 (항목 {settings.Count})");
         }
     }
 
@@ -64,11 +64,11 @@ public class Practice3 : MonoBehaviour
 
     private void Save()
     {
-        using(var Writer = new StreamWriter(path))
+        using (var writer = new StreamWriter(path))
         {
-            foreach(var pair in settings)
+            foreach (var pair in settings)
             {
-                Writer.WriteLine($"{pair.Key} = {pair.Value}");
+                writer.WriteLine($"{pair.Key}={pair.Value}");
             }
         }
         Debug.Log("설정 저장 완료");
@@ -76,7 +76,7 @@ public class Practice3 : MonoBehaviour
 
     private void PrintAll()
     {
-        Debug.Log($"-- 설정 전체({settings.Count}개) --)");
+        Debug.Log($"-- 설정 전체 ({settings.Count}개) --");
         foreach (var pair in settings)
         {
             Debug.Log($"{pair.Key} = {pair.Value}");

@@ -1,6 +1,3 @@
-using TMPro;
-using Unity.VisualScripting;
-
 public enum Languages
 {
     Korean,
@@ -18,13 +15,15 @@ public static class DataTableIds
     };
 
     public static string String => StringTableIds[(int)Variables.Language];
-    public static readonly string item = "ItemTable";
-    public static readonly string character = "CharacterTable";
+    public static readonly string Item = "ItemTable";
+    public static readonly string Character = "CharacterTable";
 }
+
 public static class Variables
 {
     public static event System.Action OnLanguageChanged;
-    private static Languages language = Languages.Korean;
+
+    private static Languages language = Languages.English;
 
     public static Languages Language
     {
@@ -35,11 +34,11 @@ public static class Variables
             {
                 return;
             }
+
             language = value;
 
-            DataTableManager.ChangedLanguage(language);
+            DataTableManager.ChangeLanguage(language);
             OnLanguageChanged?.Invoke();
         }
     }
 }
-

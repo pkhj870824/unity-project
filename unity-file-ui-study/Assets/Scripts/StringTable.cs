@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class StringTable : DataTable
@@ -10,7 +9,6 @@ public class StringTable : DataTable
         public string String { get; set; }
     }
 
-
     private readonly Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
     public override void Load(string filename)
@@ -20,7 +18,6 @@ public class StringTable : DataTable
         string path = string.Format(FormatPath, filename);
         TextAsset textAsset = Resources.Load<TextAsset>(path);
         List<Data> list = LoadCSV<Data>(textAsset.text);
-
         foreach (var item in list)
         {
             if (!dictionary.ContainsKey(item.Id))
@@ -29,17 +26,18 @@ public class StringTable : DataTable
             }
             else
             {
-                Debug.LogError($"키 중복:{item.Id}");
+                Debug.LogError($"키 중복: {item.Id}");
             }
         }
     }
 
     public static readonly string Unknown = "키 없음";
+
     public string Get(string id)
     {
         if (!dictionary.ContainsKey(id))
         {
-            return "키 없음";
+            return Unknown;
         }
         return dictionary[id];
     }

@@ -1,76 +1,105 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public abstract class SaveData
 {
     public int Version { get; protected set; }
-    public abstract SaveData Versionup();
+    public abstract SaveData VersionUp();
 }
 
-public class SaveDatav4 : SaveData
+public class SaveDataV5 : SaveData
 {
-    public string firstName { get; set; } = string.Empty;
-    public string lastName { get; set; } = string.Empty;
-
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
     public int Gold { get; set; } = 100;
-    public SaveDatav4()
+    public List<SaveItemData> ItemList { get; set; } = new List<SaveItemData>();
+
+    public SaveDataV5()
     {
-        Version = 4;
+        Version = 5;
     }
-    public override SaveData Versionup()
+
+    public override SaveData VersionUp()
     {
         throw new System.NotImplementedException();
     }
 }
-public class SaveDatav3 : SaveData
+
+public class SaveDataV4 : SaveData
 {
-    public string playerName { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
     public int Gold { get; set; } = 100;
-    public int Exp { get; set; } = 50;
-    public SaveDatav3()
+
+    public SaveDataV4()
+    {
+        Version = 4;
+    }
+
+    public override SaveData VersionUp()
+    {
+        var data = new SaveDataV5();
+        data.FirstName = FirstName;
+        data.LastName = LastName;
+        data.Gold = Gold;
+        return data;
+    }
+}
+
+public class SaveDataV3 : SaveData
+{
+    public string PlayerName { get; set; } = string.Empty;
+    public int Gold { get; set; } = 100;
+    public int Exp { get; set; } = 0;
+
+    public SaveDataV3()
     {
         Version = 3;
     }
-    public override SaveData Versionup()
+
+    public override SaveData VersionUp()
     {
-        var data = new SaveDatav4();
-
-        string[] names = playerName.Split(' ');
-        data.firstName = names[0];
-        data.lastName = names[1];
+        var data = new SaveDataV4();
+        string[] parts = PlayerName.Split(" ");
+        data.FirstName = parts[0];
+        data.LastName = parts[1];
         data.Gold = Gold;
-
         return data;
     }
 }
-public class SaveDatav2 : SaveData
+
+public class SaveDataV2 : SaveData
 {
-    public string playerName { get; set; } = string.Empty;
+    public string PlayerName { get; set; } = string.Empty;
     public int Gold { get; set; } = 100;
-    public SaveDatav2()
+
+    public SaveDataV2()
     {
         Version = 2;
     }
-    public override SaveData Versionup()
+
+    public override SaveData VersionUp()
     {
-        var data = new SaveDatav3();
-        data.playerName = playerName;
+        var data = new SaveDataV3();
+        data.PlayerName = PlayerName;
         data.Gold = Gold;
         return data;
     }
 }
 
-public class SaveDatav1 : SaveData
+public class SaveDataV1 : SaveData
 {
-    public string playerName { get; set; } = string.Empty;
-    public SaveDatav1()
+    public string PlayerName { get; set; } = string.Empty;
+
+    public SaveDataV1()
     {
         Version = 1;
     }
-    public override SaveData Versionup()
+
+    public override SaveData VersionUp()
     {
-        var data = new SaveDatav2();
-        data.playerName = playerName;
+        var data = new SaveDataV2();
+        data.PlayerName = PlayerName;
         return data;
     }
 }

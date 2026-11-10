@@ -1,16 +1,16 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public static class DataTableManager
 {
     private static readonly Dictionary<string, DataTable> tables =
-    new Dictionary<string, DataTable>();
+        new Dictionary<string, DataTable>();
 
     static DataTableManager()
     {
         Init();
     }
+
     private static void Init()
     {
 #if UNITY_EDITOR
@@ -26,16 +26,17 @@ public static class DataTableManager
         tables.Add(DataTableIds.String, stringTable);
 #endif
 
-        var ItemTable = new ItemTable();
-        ItemTable.Load(DataTableIds.item);
-        tables.Add(DataTableIds.item, ItemTable);
+        var itemTable = new ItemTable();
+        itemTable.Load(DataTableIds.Item);
+        tables.Add(DataTableIds.Item, itemTable);
 
         var characterTable = new CharacterTable();
-        characterTable.Load(DataTableIds.character);
-        tables.Add(DataTableIds.character, characterTable);
+        characterTable.Load(DataTableIds.Character);
+        tables.Add(DataTableIds.Character, characterTable);
     }
 
-    public static T Get<T>(string id) where T : DataTable
+    public static T Get<T>(string id)
+        where T : DataTable
     {
         if (!tables.ContainsKey(id))
         {
@@ -46,10 +47,10 @@ public static class DataTableManager
     }
 
     public static StringTable StringTable => Get<StringTable>(DataTableIds.String);
-    public static ItemTable itemTable => Get<ItemTable>(DataTableIds.item);
-    public static CharacterTable characterTable => Get<CharacterTable>(DataTableIds.character);
+    public static ItemTable ItemTable => Get<ItemTable>(DataTableIds.Item);
+    public static CharacterTable CharacterTable => Get<CharacterTable>(DataTableIds.Character);
 
-    public static void ChangedLanguage(Languages lang)
+    public static void ChangeLanguage(Languages lang)
     {
         var newId = DataTableIds.StringTableIds[(int)lang];
         if (tables.ContainsKey(newId))
@@ -77,4 +78,5 @@ public static class DataTableManager
         tables.Remove(oldId);
         tables.Add(newId, table);
     }
+
 }

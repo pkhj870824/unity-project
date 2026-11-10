@@ -1,33 +1,32 @@
-using UnityEngine;
-using Newtonsoft.Json;
-using SaveDataVC = SaveDatav4;
-using Unity.VisualScripting;
 using System.IO;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using UnityEngine;
+using SaveDataVC = SaveDataV5;
 
 public static class SaveLoadManager
 {
-    private static readonly string[] SaveFileName =
+    public static readonly string[] SaveFileNames =
     {
         "SaveAuto.json",
         "Save1.json",
         "Save2.json",
         "Save3.json",
     };
-    public static string SaveDirectory =>
-        Path.Combine(Application.persistentDataPath, "Save");
+
+    public static string SaveDirectory => Path.Combine(Application.persistentDataPath, "Save");
+
     private static JsonSerializerSettings settings = new JsonSerializerSettings()
     {
         Formatting = Formatting.Indented,
         TypeNameHandling = TypeNameHandling.All,
     };
 
-    public static int SaveDataVersion { get; } = 4;
+    public static int SaveDataVersion { get; } = 5;
     public static SaveDataVC Data { get; set; } = new SaveDataVC();
 
     public static bool Save(int slot = 0)
     {
-        if (Data == null || slot < 0 || slot >= SaveFileName.Length)
+        if (Data == null || slot < 0 || slot >= SaveFileNames.Length)
         {
             return false;
         }
@@ -39,7 +38,7 @@ public static class SaveLoadManager
                 Directory.CreateDirectory(SaveDirectory);
             }
 
-            var path = Path.Combine(SaveDirectory, SaveFileName[slot]);
+            var path = Path.Combine(SaveDirectory, SaveFileNames[slot]);
             var json = JsonConvert.SerializeObject(Data, settings);
             File.WriteAllText(path, json);
             return true;
@@ -50,14 +49,15 @@ public static class SaveLoadManager
             return false;
         }
     }
+
     public static bool Load(int slot = 0)
     {
-        if (slot < 0 || slot >= SaveFileName.Length)
+        if (slot < 0 || slot >= SaveFileNames.Length)
         {
             return false;
         }
 
-        var path = Path.Combine(SaveDirectory, SaveFileName[slot]);
+        var path = Path.Combine(SaveDirectory, SaveFileNames[slot]);
         if (!File.Exists(path))
         {
             return false;
@@ -70,7 +70,7 @@ public static class SaveLoadManager
             while (dataSave.Version < SaveDataVersion)
             {
                 var pervVersion = dataSave.Version;
-                dataSave = dataSave.Versionup();
+                dataSave = dataSave.VersionUp();
                 Debug.Log($"[SaveLoad] 마이그레이션 v{pervVersion} -> v{dataSave.Version}");
             }
             Data = dataSave as SaveDataVC;

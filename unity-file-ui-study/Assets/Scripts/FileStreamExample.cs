@@ -10,13 +10,15 @@ public class FileStreamExample : MonoBehaviour
         // 파일에 바이트 쓰기
         using (FileStream fs = new FileStream(path, FileMode.Create))
         {
-            fs.WriteByte(72);   // 'H'
-            fs.WriteByte(101);  // 'e'
-            fs.WriteByte(108);  // 'l'
-            fs.WriteByte(108);  // 'l'
-            fs.WriteByte(111);  // 'o'
+            fs.WriteByte(72); // 'H'
+            fs.WriteByte(101); // 'e'
+            fs.WriteByte(108); // 'l'
+            fs.WriteByte(108); // 'l'
+            fs.WriteByte(111); // 'o'
 
-            byte[] data = { 33, 33, 33 };  // '!!!'
+            fs.Seek(5, SeekOrigin.Current);
+            
+            byte[] data = { 33, 33, 33 }; // '!!!'
             fs.Write(data, 0, data.Length);
 
             Debug.Log($"파일 크기: {fs.Length} bytes");

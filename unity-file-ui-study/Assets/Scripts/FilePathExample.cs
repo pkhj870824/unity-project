@@ -9,3 +9,9 @@ public class FilePathExample : MonoBehaviour
         Debug.Log($"streamingAssetsPath: {Application.streamingAssetsPath}");
     }
 }
+
+/*
+persistentDataPath: C:/Users/rockd/AppData/LocalLow/DefaultCompany/unity-file-ui-study
+dataPath: C:/Users/rockd/repos/lecture-live/unity-file-ui-study/Assets
+streamingAssetsPath: C:/Users/rockd/repos/lecture-live/unity-file-ui-study/Assets/StreamingAssets
+*/
